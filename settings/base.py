@@ -32,7 +32,8 @@ def get_env_variable(var_name):
 SECRET_KEY = get_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
+from django import db
+print(db.connections)
 
 #ALLOWED_HOSTS = ['localhost', '127.0.0.1', '111.222.333.444', 'mywebsite.com']
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bookingapp.apps.BookingappConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -87,8 +89,12 @@ WSGI_APPLICATION = 'meetingbooker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': get_env_variable('DATABASE_NAME'),   
+        'USER': get_env_variable('DATABASE_USER'),  
+        'PASSWORD': get_env_variable('DATABASE_PASSWORD'), 
+        'HOST': 'localhost',
+        'PORT':''
     }
 }
 
@@ -130,3 +136,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
