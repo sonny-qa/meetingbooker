@@ -23,6 +23,12 @@ class Features(models.Model):
 	"""
 	name = models.CharField(max_length=200, help_text="Enter a feature")
 
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = "Features"
+		verbose_name_plural = "Features"
 class Room(models.Model):
 
 	"""
@@ -34,7 +40,7 @@ class Room(models.Model):
 	venue = models.ForeignKey('Venue',on_delete=models.CASCADE)
 	rate = models.DecimalField(max_digits=5, decimal_places=2)
 
-	def __str__(Self):
+	def __str__(self):
 		return self.name
 
 	def get_absolute_url(self):
@@ -42,6 +48,21 @@ class Room(models.Model):
 		returns the url to access the detail of this room
 		"""
 		return reverse('room-detail',args=[str(self.id)])
+
+	def display_venue(self):
+		"""
+		creates a string of the venue for display in admin
+		"""
+
+		return self.venue
+	display_venue.short_description = 'Venue'
+
+	def display_features(self):
+		"""
+		creates a string of the features for that particular room
+		"""
+		return  ', '.join([feature.name for feature in self.features.all()[:3]])
+	display_features.short_description = 'Features'
 
 class Booking(models.Model):
 	"""
