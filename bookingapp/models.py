@@ -75,10 +75,22 @@ class Booking(models.Model):
 	end_time = models.DateTimeField(null=True,blank=True)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
 	room = models.ForeignKey('Room',on_delete=models.CASCADE)
-	venue = models.ForeignKey('Venue',on_delete=models.CASCADE)
+	#venue = models.ForeignKey(Venue,on_delete=models.CASCADE)
 
-	def __str__(Self):
-		return self.name
+	def display_booking_venue(self):
+		"""
+		function to look back up the venue for the belonging to the respective room
+		we don't put a venue field on this model as it would be repeating
+		venue belongs to a room and a booking belongs to a room
+		"""
+		return self.room.venue
+	display_booking_venue.short_description = "Venue"
+
+
+
+
+
+
 
 	def get_absolute_url(self):
 		"""

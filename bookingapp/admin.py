@@ -5,7 +5,7 @@ from .models import Venue, Features, Room, Booking
 #admin.site.register(Venue)
 #admin.site.register(Features)
 #admin.site.register(Room)
-admin.site.register(Booking)
+#admin.site.register(Booking)
 
 @admin.register(Venue)
 class VenueAdmin(admin.ModelAdmin):
@@ -19,5 +19,8 @@ class FeaturesAdmin(admin.ModelAdmin):
 class RoomAdmin(admin.ModelAdmin):
 	list_display = ('name','display_venue','seats','display_features')
 
+@admin.register(Booking)
+class Booking(admin.ModelAdmin):
+	list_display = ('id','room','display_booking_venue','start_time','end_time','user')
 
 #admin.site.register(Venue,VenueAdmin)
