@@ -9,7 +9,7 @@ from .models import Venue, Features, Room, Booking
 
 @admin.register(Venue)
 class VenueAdmin(admin.ModelAdmin):
-	list_display = ('name','address')
+	list_display = ('name','address','display_associated_rooms')
 
 @admin.register(Features)
 class FeaturesAdmin(admin.ModelAdmin):

@@ -17,6 +17,13 @@ class Venue(models.Model):
 	def __str__(self):
 		return self.name
 
+	def display_associated_rooms(self):
+		"""
+		return the list of rooms associated with a venue
+		"""
+		return ', '.join([room.name for room in self.room_set.all()[:3]])
+
+	display_associated_rooms.short_description = "Available Rooms"
 class Features(models.Model):
 	"""
 	Model to represent the different room features, (e.g. wifi, projector etc.)
@@ -29,6 +36,7 @@ class Features(models.Model):
 	class Meta:
 		verbose_name = "Features"
 		verbose_name_plural = "Features"
+
 class Room(models.Model):
 
 	"""
