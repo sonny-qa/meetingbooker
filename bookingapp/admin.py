@@ -7,9 +7,15 @@ from .models import Venue, Features, Room, Booking
 #admin.site.register(Room)
 #admin.site.register(Booking)
 
+class RoomInline(admin.TabularInline):
+	model = Room
+
+
+
 @admin.register(Venue)
 class VenueAdmin(admin.ModelAdmin):
 	list_display = ('name','address','display_associated_rooms')
+	inlines = [RoomInline]
 
 @admin.register(Features)
 class FeaturesAdmin(admin.ModelAdmin):
