@@ -1,18 +1,26 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block content %}
     <h1>Room List</h1>
 
+
     {% if room_list %}
-    <ul>
+    
 
       {% for room in room_list %}
-      <li>
-        <a href="{{ room.get_absolute_url }}">{{ room.name }}</a> ({{room.venue}})
-      </li>
+      <div class="panel panel-default">
+
+        <div class="panel-heading">{{room.name}}</div>
+                <div>
+          <img class="pull-left img-responsive" src="{% static 'images/test.png' %}" style="width:200px;height:80px; padding:8px">
+        </div>
+
+        <div class="panel-body">Venue: {{ room.venue}}</div>
+      </div>
       {% endfor %}
 
-    </ul>
+
     {% else %}
       <p>There are no rooms.</p>
     {% endif %}       
