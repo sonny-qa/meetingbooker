@@ -30,6 +30,7 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
  
 SECRET_KEY = get_env_variable('SECRET_KEY')
+GOOGLE_API = get_env_variable('GOOGLE_API')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 from django import db
