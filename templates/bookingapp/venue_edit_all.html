@@ -1,0 +1,27 @@
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Edit venue</h1>
+
+
+
+
+<form method="post" novalidate>
+ 	{% csrf_token %}
+	
+	
+	{{form.venue.label_tag}}
+	{{ form.venue }}
+
+	<h3>Venue detials:</h3>
+
+		{{form.name.label_tag}}
+		{{form.name}}
+	
+	
+
+
+</form>
+{% endblock %}
+
