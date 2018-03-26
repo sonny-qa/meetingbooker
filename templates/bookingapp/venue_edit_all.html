@@ -1,16 +1,40 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$(document).ready(function(){
+	
+	  $("#id_venue").change(function () {
+	  	 var url = $("#Venue_form").attr("venue-data-url");
+		 var venueId = $(this).val();
+		
+		console.log(url)
+
+		$.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'venue': venueId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+			
+          $("#id_name").val(($.parseJSON(data))[0].fields.address);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+	  })
+
+})
+
+</script>
+
 
 {% extends "base_generic.html" %}
 
 {% block content %}
+
 <h1>Edit venue</h1>
 
-
-
-
-<form method="post" novalidate>
+<form novalidate method="post" venue-data-url="{% url 'load-venue-details' %}" id="Venue_form" >
  	{% csrf_token %}
-	
-	
+		
 	{{form.venue.label_tag}}
 	{{ form.venue }}
 
@@ -18,9 +42,6 @@
 
 		{{form.name.label_tag}}
 		{{form.name}}
-	
-	
-
 
 </form>
 {% endblock %}

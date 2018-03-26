@@ -7,4 +7,5 @@ urlpatterns = [
 	path('rooms/', views.RoomListView.as_view(), name='rooms'),
 	path('room/<int:pk>', views.RoomDetailView.as_view(), name='room-detail'),
 	path('venue/edit-all',views.edit_all_venues,name="edit-all-venues"),
+	path('ajax/load-venue-details/', views.LoadVenueDetails, name='load-venue-details'),
 ]
