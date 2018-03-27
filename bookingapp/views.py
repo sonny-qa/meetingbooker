@@ -12,6 +12,7 @@ from django.http import HttpResponse
 import json as json
 # Create your views here.
 from django.core import serializers
+from django.contrib import messages
 
 import os
 def get_env_variable(var_name):
@@ -60,8 +61,18 @@ def edit_all_venues(request):
 	if request.method == 'POST':
 		form = VenueSelectForm(request.POST)
 		if form.is_valid():
+			print("got here...", list(request.POST.get('venue')))
 			
-			return HttpResponseRedirect(reverse('rooms') )  # does nothing, just trigger the validation
+			#save the upda
+
+			obj = Venue.objects.get(id=request.POST.get('venue'))
+			obj.name = request.POST.get('name')
+			obj.address = request.POST.get('address')
+			obj.save()
+	
+			messages.add_message(request, messages.INFO, 'Saved')
+			return render(request, 'bookingapp/venue_edit_all.html', {'form': form})
+			#return HttpResponseRedirect(reverse('rooms') )  # does nothing, just trigger the validation
 
 	else:
 		form = VenueSelectForm()
@@ -74,19 +85,18 @@ class VenueSelectForm(forms.Form):
 
 	venue = forms.ChoiceField(choices=[('','---------')]+[(v.id, str(v)) for v in Venue.objects.all()]
 		,label="Select a Venue to edit ")
-	name = forms.CharField(max_length=30,label="Venue name")
+	name = forms.CharField(max_length=30,label="Name")
+	address = forms.CharField(widget=forms.Textarea(attrs={'rows':2, 'cols':18}),label="Address")
 
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args,**kwargs)
-		self.fields['venue'].queryset = Venue.objects.none()
 
 def LoadVenueDetails(request):
 
 	venue_id = request.GET.get('venue')
 	venue_details = Venue.objects.filter(id=venue_id)
 
-	#return ("hello")
-	data = serializers.serialize('json', venue_details, fields=('name','address', ))
+
+	print('sonny',venue_details.values())
+	data = serializers.serialize('json', venue_details, fields=('name','address', 'id'))
 
 	
 	return HttpResponse(json.dumps(data),content_type="application/json")

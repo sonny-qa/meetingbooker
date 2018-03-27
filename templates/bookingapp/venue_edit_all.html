@@ -1,12 +1,16 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
+
+
+
 $(document).ready(function(){
-	
+	  
 	  $("#id_venue").change(function () {
 	  	 var url = $("#Venue_form").attr("venue-data-url");
 		 var venueId = $(this).val();
+
+		$("#save-alert").hide()
 		
-		console.log(url)
 
 		$.ajax({                       // initialize an AJAX request
         url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
@@ -14,8 +18,12 @@ $(document).ready(function(){
           'venue': venueId       // add the country id to the GET parameters
         },
         success: function (data) {   // `data` is the return of the `load_cities` view function
-			
-          $("#id_name").val(($.parseJSON(data))[0].fields.address);  // replace the contents of the city input with the data that came from the server
+		  console.log('data...',($.parseJSON(data))[0].pk)
+		  $("#id").val(($.parseJSON(data))[0].pk);  
+          $("#id_name").val(($.parseJSON(data))[0].fields.name);  
+          $("#id_address").val(($.parseJSON(data))[0].fields.address);  // replace the contents of the city input with the data that came from the server
+
+         
         }
       });
 
@@ -38,11 +46,39 @@ $(document).ready(function(){
 	{{form.venue.label_tag}}
 	{{ form.venue }}
 
-	<h3>Venue detials:</h3>
+	<h3>Venue details:</h3>
+		<table>
+		<tr>
+		<th>{{form.name.label_tag}}</th>
+		<th>{{form.name}}</th>
+		
 
-		{{form.name.label_tag}}
-		{{form.name}}
+		<tr>
+		<th>{{form.address.label_tag}}</th>
+		<th>{{form.address}}</th>
+		</tr>
 
+	
+		</table>
+	
+	
+		<table><tr><th><button type="submit">Save changes</button></th>
+	
+		</tr>
+		
+		<th></th>
+		
+	</table>
+
+	{% if messages %}
+  {% for message in messages %}
+    <div{% if message.tags %} id='save-alert' class="alert alert-{{ message.tags }}"{% endif %}>
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+</div>
 </form>
 {% endblock %}
 

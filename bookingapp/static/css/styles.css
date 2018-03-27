@@ -11,3 +11,13 @@ body { padding-top: 70px; }
     width: 480px;
     padding-right: 2px;
   }
+
+table {
+    border-collapse: separate;
+    border-spacing: 10px;
+
+}
+
+th {
+    font-weight: normal;
+}
