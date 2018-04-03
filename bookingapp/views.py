@@ -15,6 +15,10 @@ from django.core import serializers
 from django.contrib import messages
 
 import os
+
+from django.contrib.auth.decorators import login_required
+
+
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
@@ -56,14 +60,14 @@ def editVenue(request):
 		context={'GOOGLE_API':GOOGLE_API}
 		)
 
+@login_required(login_url='../accounts/login')
 def edit_all_venues(request):
 
 	if request.method == 'POST':
 		form = VenueSelectForm(request.POST)
 		if form.is_valid():
-			print("got here...", list(request.POST.get('venue')))
 			
-			#save the upda
+			#save the updated data
 
 			obj = Venue.objects.get(id=request.POST.get('venue'))
 			obj.name = request.POST.get('name')
