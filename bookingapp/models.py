@@ -9,7 +9,9 @@ class Venue(models.Model):
 	"""
 	Model representing a venue, i.e. a church, mosque etc.
 	"""
-
+	class Meta:
+		permissions = (("can_edit_venue","Edit a venue details"),)
+		
 	name = models.CharField(max_length=200, help_text="Enter a venue name")
 	address = models.CharField(max_length=200, help_text="Enter the address")
 

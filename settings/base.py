@@ -31,6 +31,7 @@ def get_env_variable(var_name):
  
 SECRET_KEY = get_env_variable('SECRET_KEY')
 GOOGLE_API = get_env_variable('GOOGLE_API')
+SENDGRID_PASSWORD = get_env_variable('SENDGRID_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 from django import db
@@ -132,6 +133,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+PASSWORD_RESET_TIMEOUT_DAYS=1
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -141,6 +145,11 @@ STATIC_URL = '/static/'
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = '3108sp'
+EMAIL_HOST_PASSWORD = SENDGRID_PASSWORD
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL='hello@venuebooker.com'

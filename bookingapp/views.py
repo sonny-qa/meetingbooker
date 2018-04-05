@@ -17,6 +17,7 @@ from django.contrib import messages
 import os
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 
 
 def get_env_variable(var_name):
@@ -60,7 +61,10 @@ def editVenue(request):
 		context={'GOOGLE_API':GOOGLE_API}
 		)
 
+
+
 @login_required(login_url='../accounts/login')
+@permission_required('bookingapp.can_edit_venue',login_url='../accounts/login')
 def edit_all_venues(request):
 
 	if request.method == 'POST':
