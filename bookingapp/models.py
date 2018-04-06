@@ -1,7 +1,7 @@
-from django.db import models
 import uuid
 from django.urls import reverse #generate URL by reversing url pattern
 from django.conf import settings
+from django.db import models
 # Create your models here.
 
 
@@ -107,4 +107,9 @@ class Booking(models.Model):
 		returns the url to access the detail of this booking
 		"""
 		return reverse('booking-detail',args=[str(self.id)])
+
+class Document(models.Model):
+	uploaded_at = models.DateTimeField(auto_now_add=True)
+	upload = models.FileField()
+	room = models.ForeignKey('Room', on_delete=models.CASCADE)
 

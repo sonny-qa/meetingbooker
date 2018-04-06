@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+    <h2>Select the room: </h2>
+    <div>
+        <ul>
+            {% for room in object_list %}
+                <li>{{ room.name }} - <em>{{ room.venue}} </em> |<a
+                        href="{% url 'room-edit' room.pk %}"> edit</a> |
+                    <a href="">delete</a>
+                </li>
+            {% empty %}
+                <li>No venues yet.</li>
+            {% endfor %}
+
+        </ul>
+        <p>
+            <a href="">add a venue</a>
+        </p>
+    </div>
+{% endblock %}

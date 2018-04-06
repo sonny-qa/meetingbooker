@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import Venue, Features, Room, Booking
+from .models import Venue, Features, Room, Booking, Document
 from django.views import generic
 from django import forms
+from django.forms import ModelForm, inlineformset_factory
 
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
@@ -18,7 +19,9 @@ import os
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
-
+from django.forms.models import modelform_factory
+from django.forms.widgets import CheckboxSelectMultiple
+from django.forms import ModelMultipleChoiceField,ModelForm
 
 def get_env_variable(var_name):
     try:
@@ -109,3 +112,38 @@ def LoadVenueDetails(request):
 	
 	return HttpResponse(json.dumps(data),content_type="application/json")
 	#return render(request,'bookingapp/venue_details.html',{'venue_details':venue_details})
+
+
+#list of venues for editing rooms
+class RoomListEdit(ListView):
+	model = Room
+	template_name = 'bookingapp/room_list_edit.html'
+
+
+class RoomUpdate(UpdateView):
+	
+	model=Room	
+	form_class =  modelform_factory(Room,
+        widgets={"features": CheckboxSelectMultiple }, fields = ['name','venue','seats','rate','features'])
+	
+	template_name = 'bookingapp/room_update_form.html'
+	success_url = reverse_lazy('rooms-list-edit')
+	
+
+
+#-------------------------------------------
+
+class DocumentCreateView(CreateView):
+	model = Document
+	template_name = 'bookingapp/document_form.html'
+	fields=['upload',]
+	success_url = reverse_lazy('rooms-list-edit')
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		documents = Document.objects.all()
+		context['documents'] = documents
+		return context
+
+
+
