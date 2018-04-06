@@ -7,11 +7,11 @@
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
 
-    <table>
-    	<td>Images</td>
-    </table>
+ 
     <input type="submit" value="Update" class="btn btn-success" />
     <a href="{{ view.get_success_url }}" class="btn btn-default">Cancel</a>
     
 </form>
+<h3>Images</h3>
+    <a href="{% url 'room-images' room.pk %}" class="btn btn-primary">Manage Images</a>
 {% endblock %}

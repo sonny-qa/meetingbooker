@@ -14,6 +14,7 @@ urlpatterns = [
 
 	path('edit-rooms/',views.RoomListEdit.as_view(), name="rooms-list-edit"),
 	url(r'room/(?P<pk>[0-9]+)/$', views.RoomUpdate.as_view(), name='room-edit'),
+	url(r'room-images/(?P<pk>[0-9]+)/$', views.DocumentCreateView.as_view(), name='room-images'),
 
 
 ]

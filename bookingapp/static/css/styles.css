@@ -21,3 +21,18 @@ table {
 th {
     font-weight: normal;
 }
+
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+table td,
+table th {
+  border: 1px solid #eceeef;
+  padding: 5px 8px;
+  text-align: left;
+}
+table thead {
+  border-bottom: 2px solid #eceeef;
+}
