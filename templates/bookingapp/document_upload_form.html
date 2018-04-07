@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+
+<form method="post" enctype="multipart/form-data">
+
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit" class="btn btn-success" >Upload</button>
+  <a href="{% url 'rooms-images' %}" class="btn btn-danger">Cancel</a>
+
+</form>
+
+
+
+
+{% endblock %}

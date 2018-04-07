@@ -111,5 +111,5 @@ class Booking(models.Model):
 class Document(models.Model):
 	uploaded_at = models.DateTimeField(auto_now_add=True)
 	upload = models.FileField()
-
+	room = models.ForeignKey('Room', on_delete=models.CASCADE, null=True)
 

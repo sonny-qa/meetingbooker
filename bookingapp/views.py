@@ -133,19 +133,26 @@ class RoomUpdate(UpdateView):
 
 #-------------------------------------------
 
-class DocumentCreateView(CreateView):
+class DocumentListView(ListView):
 	model = Document
 	template_name = 'bookingapp/document_form.html'
-	fields=['upload',]
-	success_url = reverse_lazy('rooms-list-edit')
+
 
 	def get_context_data(self, **kwargs):
+		#pk = self.kwargs['pk']
+		#print('pk',pk)
 		context = super().get_context_data(**kwargs)
+		#documents = Document.objects.filter(room_id=pk)
 		documents = Document.objects.all()
 		context['documents'] = documents
 		return context
 
-
+class DocumentCreateView(CreateView):
+	model = Document
+	template_name = 'bookingapp/document_upload_form.html'
+	fields = ['room','upload']
+	fields_required = ['room','upload']
+	success_url = reverse_lazy('rooms-images')
 
 
 

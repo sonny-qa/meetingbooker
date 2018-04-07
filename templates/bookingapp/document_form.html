@@ -2,6 +2,7 @@
 {% block content %}
 
 <form method="post" enctype="multipart/form-data">
+	<h3>Images</h3>
   {% csrf_token %}
   {{ form.as_p }}
   <table>
@@ -10,6 +11,7 @@
       <th>Name</th>
       <th>Uploaded at</th>
       <th>Size</th>
+      <th>Room</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +20,7 @@
         <td><a href="{{ document.upload.url }}" target="_blank">{{ document.upload.name }}</a></td>
         <td>{{ document.uploaded_at }}</td>
         <td>{{ document.upload.size|filesizeformat }}</td>
+        <td>{{ document.room }}</td>
       </tr>
     {% empty %}
       <tr>
@@ -26,7 +29,8 @@
     {% endfor %}
   </tbody>
 </table>
-  <button type="submit" class="btn btn-success" >Submit</button>
+  <a href="{% url 'image-add' %}" class="btn btn-primary">Add image</a>
+
 </form>
 
 
