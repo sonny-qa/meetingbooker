@@ -18,6 +18,11 @@ import django.dispatch
 
 import os
 
+from bookingapp.signals import *
+from bookingapp.receivers import *
+
+
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.forms.models import modelform_factory
@@ -146,7 +151,8 @@ class RoomUpdate(UpdateView):
 class DocumentListView(ListView):
 	model = Document
 	template_name = 'bookingapp/document_form.html'
-
+	print('send signal')
+	book_published.send(sender=Document, book='test', user='test2')
 
 	def get_context_data(self, **kwargs):
 		#pk = self.kwargs['pk']
