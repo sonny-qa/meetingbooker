@@ -14,6 +14,7 @@ import json as json
 # Create your views here.
 from django.core import serializers
 from django.contrib import messages
+import django.dispatch
 
 import os
 
@@ -30,7 +31,7 @@ import boto3
 import botocore
 
 from urllib.parse import urlparse
-
+from django.http import JsonResponse
 
 def get_env_variable(var_name):
     try:
@@ -172,6 +173,33 @@ class DocumentCreateView(CreateView):
 
 
 def DocumentDelete(request):
+
+	doc_id = request.GET.get('doc_id')
+	
+	item = Document.objects.filter(id=doc_id)
+	#item_key = item[0].upload.url
+	#o = urlparse(item_key)
+	#get the path for required object
+	#path = o.path
+	#bucket.object(item_key).delete()
+	
+	#first delete model from DB
+	print('deleting django obj',item)
+	item.delete()
+
+	#s3.Object('meetingbooker-static', path[1:]).delete()
+
+
+	#return (render_to_response('bookingapp/document_form.html'))
+	#return HttpResponse(status=200)
+	#return HttpResponseRedirect('room-images')
+	return JsonResponse({'id':"#"+doc_id},status=201)
+
+@receiver(post_delete, sender=Document)
+def aws_del(sender, instance,**kwargs):
+	#signal handler
+	#s3.Object('meetingbooker-static', path[1:]).delete()
+
 	AWS_ACCESS_KEY_ID  = get_env_variable('AWS_ACCESS_KEY_ID')
 	AWS_SECRET_ACCESS_KEY= get_env_variable('AWS_SECRET_ACCESS_KEY')
 
@@ -179,47 +207,11 @@ def DocumentDelete(request):
 	#print('session',session)
 	s3 = session.resource('s3')
 	bucket = s3.Bucket('meetingbooker-static')
-	doc_id = request.GET.get('doc_id')
-	item = Document.objects.filter(id=doc_id)
-	item_key = item[0].upload.url
-	o = urlparse(item_key)
-	print('netloc',o.netloc)
-	print('path',o.path)
+
+	#get the url from instanc passed with signal
+
+	o = urlparse(instance.upload.url)
 	path = o.path
-	#bucket.object(item_key).delete()
-	print('item...','https://'+ o.netloc + o.path)
-	bucket.delete_objects(
-    Delete={
-        'Objects': [
-            {
-                'Key': str('https://'+o.netloc+o.path)
-            }
-        ]
-    }
-)
-
 	s3.Object('meetingbooker-static', path[1:]).delete()
-#https://meetingbooker-static.s3.amazonaws.com/media/IMG_4963_1_9BV4oXM.png and this media/IMG_4963_1_9BV4oXM.png
-	for object in bucket.objects.all():
-		#print('this',item_key,'and this',object.key)
-
-
-
-		if str(item_key) in 'https://meetingbooker-static.s3.amazonaws.com/'+object.key:
-			print('does it match',item_key == str('https://'+o.netloc+o.path))
-			print('got it',object.key,'matches',item_key)
-			#object.delete()
 	
-	
-	
-		
-	
-	#s3.Object('meetingbooker-static', item_key).delete()
-	#Document.objects.filter(id=doc_id).delete()
-
-	print('deleted?')
-
-
-	return HttpResponse('ok')
-
-
+	print("Request finished! getting")
