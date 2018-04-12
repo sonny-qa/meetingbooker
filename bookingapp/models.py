@@ -14,7 +14,7 @@ class Venue(models.Model):
 		
 	name = models.CharField(max_length=200, help_text="Enter a venue name")
 	address = models.CharField(max_length=200, help_text="Enter the address")
-
+	
 
 	def __str__(self):
 		return self.name
@@ -49,7 +49,8 @@ class Room(models.Model):
 	features = models.ManyToManyField(Features, help_text="Select room features")
 	venue = models.ForeignKey('Venue',on_delete=models.CASCADE)
 	rate = models.DecimalField(max_digits=5, decimal_places=2)
-
+	owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
+	
 	def __str__(self):
 		return self.name
 

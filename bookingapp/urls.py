@@ -16,6 +16,7 @@ urlpatterns = [
 	path('rooms-images/',views.DocumentListView.as_view(), name='rooms-images'),
 	url(r'room/(?P<pk>[0-9]+)/$', views.RoomUpdate.as_view(), name='room-edit'),
 	path('image-add/', views.DocumentCreateView.as_view(), name='image-add'),
+	path('image-delete',views.DocumentDelete,name='delete-doc'),
 
 
 ]

@@ -1,5 +1,34 @@
+
 {% extends "base_generic.html" %}
 {% block content %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".delete_btn").click(function(){
+		var id = $(this).attr('id')
+		console.log('fired')
+
+		$.ajax({
+            url: "{% url 'delete-doc' %}",
+            data: { 'doc_id' : id },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}" );
+            },
+            success: function(response){
+            	console.log('coming back', response)
+            }
+	})
+
+})
+
+})
+</script>
+
+
+
+
+
 
 <form method="post" enctype="multipart/form-data">
 	<h3>Images</h3>
@@ -12,15 +41,18 @@
       <th>Uploaded at</th>
       <th>Size</th>
       <th>Room</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
     {% for document in documents %}
-      <tr>
+      <tr id="{{document.id }}">
         <td><a href="{{ document.upload.url }}" target="_blank">{{ document.upload.name }}</a></td>
         <td>{{ document.uploaded_at }}</td>
         <td>{{ document.upload.size|filesizeformat }}</td>
+        <!--<td>{{ document.upload.size|filesizeformat }}</td> !-->
         <td>{{ document.room }}</td>
+        <td ><a href="" id="{{ document.id }}" class="delete_btn">X</a></td>
       </tr>
     {% empty %}
       <tr>

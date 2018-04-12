@@ -23,7 +23,7 @@ class FeaturesAdmin(admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-	list_display = ('name','display_venue','seats','display_features')
+	list_display = ('name','display_venue','seats','display_features','owner')
 
 @admin.register(Booking)
 class Booking(admin.ModelAdmin):
