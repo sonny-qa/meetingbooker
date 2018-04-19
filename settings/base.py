@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookingapp.apps.BookingappConfig',
     'storages',
+    'django.contrib.gis',
 
 ]
 
@@ -95,14 +96,15 @@ WSGI_APPLICATION = 'meetingbooker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': get_env_variable('DATABASE_NAME'),   
-        'USER': get_env_variable('DATABASE_USER'),  
-        'PASSWORD': get_env_variable('DATABASE_PASSWORD'), 
-        'HOST': 'localhost',
-        'PORT':''
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': "meeting_app_db",   
+        'USER': "meetingappuser",  
+        'PASSWORD': "Green.10", 
+        'HOST': "sonny-db.crnxczgfbxe2.eu-west-1.rds.amazonaws.com",
+        'PORT':5432
     }
 }
+
 
 
 # Password validation

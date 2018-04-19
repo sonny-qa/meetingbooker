@@ -7,4 +7,6 @@ from .signals import *
 @receiver(book_published)
 def send_mail_on_publish(sender, **kwargs):
     # contains the logic to send the email to author.
+
+
     print('receiver fired')

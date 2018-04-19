@@ -55,7 +55,7 @@
         
           {% else %}
           <a class="btn btn-success " href="{% url 'login'%}?next={{request.path}}">Login</a>
-          <a class="btn btn-default " href="{% url 'login'%}?next={{request.path}}">Register</a>
+          <a class="btn btn-default " href="{% url 'signup'%}?next={{request.path}}">Register</a>
           {% endif %}
 <!--
           <button type="button" class="btn btn-success" value="{% url 'login'%}?next={{request.path}}">Login</button>

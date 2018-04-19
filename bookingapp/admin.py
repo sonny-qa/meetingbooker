@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Venue, Features, Room, Booking, Document
+from .models import  Venue, Features, Room, Booking, Document
 # Register your models here.
 
 #admin.site.register(Venue)

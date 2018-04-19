@@ -2,8 +2,8 @@ import uuid
 from django.urls import reverse #generate URL by reversing url pattern
 from django.conf import settings
 from django.db import models
+from django.contrib.gis.db import models as gmodels
 # Create your models here.
-
 
 class Venue(models.Model):
 	"""
@@ -12,10 +12,9 @@ class Venue(models.Model):
 	class Meta:
 		permissions = (("can_edit_venue","Edit a venue details"),)
 		
-	name = models.CharField(max_length=200, help_text="Enter a venue name")
-	address = models.CharField(max_length=200, help_text="Enter the address")
+	name = models.CharField(max_length=200, help_text="Enter a venue name",null=True)
+	address = models.CharField(max_length=200, help_text="Enter the address",null=True)
 	
-
 	def __str__(self):
 		return self.name
 
@@ -26,6 +25,8 @@ class Venue(models.Model):
 		return ', '.join([room.name for room in self.room_set.all()[:3]])
 
 	display_associated_rooms.short_description = "Available Rooms"
+
+
 class Features(models.Model):
 	"""
 	Model to represent the different room features, (e.g. wifi, projector etc.)
@@ -47,7 +48,7 @@ class Room(models.Model):
 	name = models.CharField(max_length=200, help_text="Enter a room name")
 	seats = models.IntegerField()
 	features = models.ManyToManyField(Features, help_text="Select room features")
-	venue = models.ForeignKey('Venue',on_delete=models.CASCADE)
+	venue = models.ForeignKey(Venue,on_delete=models.CASCADE,null=True)
 	rate = models.DecimalField(max_digits=5, decimal_places=2)
 	owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
 	
@@ -85,8 +86,8 @@ class Booking(models.Model):
 	start_time = models.DateTimeField(null=True,blank=True)
 	end_time = models.DateTimeField(null=True,blank=True)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-	room = models.ForeignKey('Room',on_delete=models.CASCADE)
-	#venue = models.ForeignKey(Venue,on_delete=models.CASCADE)
+	room = models.ForeignKey(Room,on_delete=models.CASCADE)
+	venue = models.ForeignKey(Venue,on_delete=models.CASCADE,null=True)
 
 	def display_booking_venue(self):
 		"""
@@ -112,5 +113,18 @@ class Booking(models.Model):
 class Document(models.Model):
 	uploaded_at = models.DateTimeField(auto_now_add=True)
 	upload = models.FileField()
-	room = models.ForeignKey('Room', on_delete=models.CASCADE, null=True)
+	room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
+
+
+class Location(models.Model):
+	venue = models.ForeignKey(Venue,on_delete=models.CASCADE,null=True)
+	number = models.CharField(max_length=1024, help_text="House number", null=True)
+	street = models.CharField(max_length=1024, help_text="Street name", null=True)
+	town = models.CharField(max_length=1024, help_text="Town", null=True)
+	country = models.CharField(max_length=1024, help_text="Country", null=True)
+	postcode = models.CharField(max_length=1024, help_text="Postcode", null=True)
+	position = gmodels.PointField(null=True, blank=True)
+
+	def __str__(self):
+		return self.name
 
