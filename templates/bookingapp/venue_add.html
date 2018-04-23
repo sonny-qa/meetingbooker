@@ -1,0 +1,102 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+
+
+$(document).ready(function(){
+	  
+$("#lookup").click(function(e){
+			e.preventDefault();
+			console.log('lookup')
+
+			var number = $('#number').val();
+  			var postcode = $('#postcode').val().toUpperCase();
+
+console.log('http://maps.googleapis.com/maps/api/geocode/json?address=' + postcode + '&sensor=false')
+
+  			$.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address=' + postcode + '&sensor=false',  
+            function(data) {
+            	console.log('back...',data.results)
+            if (data && data.results && data.results.length) { // there are some results
+            lat = data.results[0].geometry.location.lat;
+            long = data.results[0].geometry.location.lng;
+            add = data.results[0].formatted_address;
+            console.log(lat,long,add)
+        }
+
+              
+          })
+
+})
+
+})
+
+</script>
+
+
+
+
+
+{% extends "base_generic.html" %}
+{% block content %}
+
+<h4>Venue details</h4>
+  {{ form.as_p }}
+<h4>Address:</h4>
+		
+		<p>Enter house number and postcode then lookup:</p>
+		<div>
+  <label>House number:</label>
+
+		<input id="number" type="text" onfocus="if(this.value == 'name/number') { this.value = ''; }" />
+		</div>
+  <label>Postcode</label>
+<input id="postcode" type="text"  onfocus="if(this.value == 'postcode') { this.value = ''; }" />
+
+<a href="" id="lookup" class="btn btn-primary">Lookup</a>
+
+<div style="padding-top: 15px">
+</div>
+	<p>or enter manually:</p>
+
+<table>
+	<tr><td><label>Number:</label>
+<input type="" name=""></td></tr>
+
+<tr><td><label>Street:</label>
+<input type="" name="">
+	</td>
+</tr>
+
+<tr><td>
+	<label>Town:</label>
+<input type="" name="">
+</td></tr>
+
+<tr><td>
+	
+	<label>County:</label>
+<input type="" name="">
+</td></tr>
+
+<tr><td>
+	<label>Postcode:</label>
+<input type="" name="">
+</td></tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a href="{% url 'rooms-images' %}" class="btn btn-success">Save</a>
+{% endblock %}

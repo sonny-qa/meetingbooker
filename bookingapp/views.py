@@ -199,6 +199,11 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
+class VenueAdd(CreateView):
+	model = Venue
+	template_name = 'bookingapp/venue_add.html'
+	fields = ('name',)
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)

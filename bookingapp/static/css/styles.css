@@ -29,10 +29,16 @@ table {
 }
 table td,
 table th {
-  border: 1px solid #eceeef;
+
   padding: 5px 8px;
   text-align: left;
 }
 table thead {
   border-bottom: 2px solid #eceeef;
 }
+
+label {
+  display: inline-block;
+  width: 130px;
+  text-align: left;
+}​
