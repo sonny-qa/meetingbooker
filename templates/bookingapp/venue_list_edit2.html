@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+    <h2>Select the Venue: </h2>
+    <div>
+        <ul>
+            {% for venue in object_list %}
+                <li>{{ venue.name }} - {{venue.location.street}} {{venue.location.town}}  {{ venue.location.postcode }}<em> </em> |<a
+                        href=""> edit</a> |
+                    <a href="">delete</a>
+                </li>
+            {% empty %}
+                <li>No Venues yet.</li>
+            {% endfor %}
+
+        </ul>
+        <p>
+            <a href="{% url 'venue-add' %}">add a venue</a>
+        </p>
+    </div>
+{% endblock %}

@@ -13,9 +13,11 @@ urlpatterns = [
 
 
 	path('edit-rooms/',views.RoomListEdit.as_view(), name="rooms-list-edit"),
+	path('edit-venues/',views.VenueListEdit.as_view(), name="venues-list-edit"),
 	path('rooms-images/',views.DocumentListView.as_view(), name='rooms-images'),
 	url(r'room/(?P<pk>[0-9]+)/$', views.RoomUpdate.as_view(), name='room-edit'),
 	path('image-add/', views.DocumentCreateView.as_view(), name='image-add'),
+	path('room-create/',views.RoomCreate.as_view(),name='room-create'),
 	path('image-delete',views.DocumentDelete,name='delete-doc'),
 	url(r'^signup/$', views.signup, name='signup'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',

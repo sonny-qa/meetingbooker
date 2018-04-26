@@ -102,7 +102,7 @@
       <ul class="sidebar-nav">
               {% if perms.bookingapp.can_edit_venues %}
         <li><b>Editing</b></li>
-        <li><a href="{% url 'edit-all-venues' %}">Edit Venues</a></li>   
+        <li><a href="{% url 'venues-list-edit' %}">Edit Venues</a></li>   
         <li> <a href="{% url 'rooms-list-edit' %}"> Edit rooms</a></li>
          <li> <a href="{% url 'rooms-images' %}"> Edit Images</a></li>
         <li><a href="{% url 'venue-add' %}">Add Venue</a></li>   

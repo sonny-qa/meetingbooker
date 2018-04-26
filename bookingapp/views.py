@@ -153,6 +153,10 @@ def SaveVenueDetails(request):
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
 	venue_name = request.GET.get('venue_name')
+	number = request.GET.get('number')
+	street = request.GET.get('street')
+	town = request.GET.get('town')
+	county = request.GET.get('county')
 	
 	print('got postcode back...',lat,lng,venue_name)
 	print('anything', Venue.objects.filter(name=venue_name).first())
@@ -167,7 +171,8 @@ def SaveVenueDetails(request):
 
 		point = GEOSGeometry("POINT({0} {1})".format(Decimal(lng), Decimal(lat)))
 
-		loc = Location(venue=new_venue,postcode=postcode,position=point)
+		loc = Location(venue=new_venue,postcode=postcode,position=point,
+			number=number, street=street, town=town, county=county)
 		loc.save()
 		return HttpResponse('created ok')
 
@@ -186,6 +191,10 @@ class RoomListEdit(ListView):
 	model = Room
 	template_name = 'bookingapp/room_list_edit.html'
 
+class VenueListEdit(ListView):
+	model = Venue
+	template_name = 'bookingapp/venue_list_edit2.html'
+
 
 class RoomUpdate(UpdateView):
 	
@@ -196,8 +205,13 @@ class RoomUpdate(UpdateView):
 	template_name = 'bookingapp/room_update_form.html'
 	success_url = reverse_lazy('rooms-list-edit')
 	
-
-
+class RoomCreate(CreateView):
+	model= Room
+	form_class =  modelform_factory(Room,
+        widgets={"features": CheckboxSelectMultiple }, fields = ['name','venue','seats','rate','features'])
+	
+	template_name = 'bookingapp/room_create_form.html'
+	success_url = reverse_lazy('rooms-list-edit')
 #-------------------------------------------
 
 class DocumentListView(ListView):

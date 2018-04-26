@@ -35,6 +35,6 @@ class Document(admin.ModelAdmin):
 
 @admin.register(Location)
 class Location(admin.ModelAdmin):
-	list_display = ('venue','postcode','position','street','county')
+	list_display = ('venue','postcode','position','street','county','town','number')
 
 #admin.site.register(Venue,VenueAdmin)
