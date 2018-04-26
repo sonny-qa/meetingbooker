@@ -7,29 +7,106 @@ $(document).ready(function(){
 	  
 $("#lookup").click(function(e){
 			e.preventDefault();
-			console.log('lookup')
+			
+			//CLEAR FIELDS
+			$('#street').val("")
+			$('#town').val('')
+			$('#county').val('')
+			$('#number').val('')
+			$('#postcode').val('')
 
-			var number = $('#number').val();
-  			var postcode = $('#postcode').val().toUpperCase();
+			var number = $('#IN_number').val();
+  			var postcode = $('#IN_postcode').val().toUpperCase();
+			
+			$('#number').val(number)
+			$('#postcode').val(postcode)
 
-console.log('http://maps.googleapis.com/maps/api/geocode/json?address=' + postcode + '&sensor=false')
 
   			$.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address=' + postcode + '&sensor=false',  
             function(data) {
-            	console.log('back...',data.results)
+            	//console.log('back...',data.results)
             if (data && data.results && data.results.length) { // there are some results
             lat = data.results[0].geometry.location.lat;
-            long = data.results[0].geometry.location.lng;
-            add = data.results[0].formatted_address;
-            console.log(lat,long,add)
+            lng = data.results[0].geometry.location.lng;
+            //add = data.results[0].formatted_address;
+            //console.log(lat,long,add)
+            address = data.results[0].address_components;              
+            street = address[1].long_name;
+            town = address[2].long_name;
+            county = address[3].long_name
+            console.log('earlier',address,street,town,county)
+			
+			//POPULATE form fields
+			$('#street').val(street)
+			$('#town').val(town)
+			
+			$('#county').val(county)
+			$('#lat').val(lat)
+			$('#lng').val(lng)
+			
+
         }
 
               
           })
 
-})
 
 })
+
+$("#send").click(function(e){
+			e.preventDefault();
+			
+			//grab values from form and put into object
+			var number = $('#number').val()
+			var postcode = $('#postcode').val()
+			var street = $('#street').val()
+			var town = $('#town').val()
+			var county = $('#county').val()
+			var lat = $('#lat').val()
+			var lng = $('#lng').val()
+			var venue_name = $('#id_name').val()
+
+			var 
+			//post object back to server
+		obj = {
+				'number': number,
+				'postcode': postcode,
+				'street': street,
+				'town': town,
+				'county': county,
+				'lat':lat,
+				'lng': lng,
+				'venue_name':venue_name		
+			}	
+		
+		var url = $("#Venue_table").attr("venue-data-url");
+			$.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data : {
+				'number': number,
+				'postcode': postcode,
+				'street': street,
+				'town': town,
+				'county': county,
+				'lat':lat,
+				'lng': lng,
+				'venue_name':venue_name			
+			},
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+		  console.log('data sent ok', data)
+		
+         
+        }
+      });
+
+
+		})
+
+
+
+})
+
+
 
 </script>
 
@@ -48,10 +125,10 @@ console.log('http://maps.googleapis.com/maps/api/geocode/json?address=' + postco
 		<div>
   <label>House number:</label>
 
-		<input id="number" type="text" onfocus="if(this.value == 'name/number') { this.value = ''; }" />
+		<input id="IN_number" type="text" onfocus="if(this.value == 'name/number') { this.value = ''; }" />
 		</div>
   <label>Postcode</label>
-<input id="postcode" type="text"  onfocus="if(this.value == 'postcode') { this.value = ''; }" />
+<input id="IN_postcode" type="text"  onfocus="if(this.value == 'postcode') { this.value = ''; }" />
 
 <a href="" id="lookup" class="btn btn-primary">Lookup</a>
 
@@ -59,30 +136,32 @@ console.log('http://maps.googleapis.com/maps/api/geocode/json?address=' + postco
 </div>
 	<p>or enter manually:</p>
 
-<table>
+<table id="Venue_table" venue-data-url="{% url 'save-venue-details' %}">
 	<tr><td><label>Number:</label>
-<input type="" name=""></td></tr>
+<input type="" id="number"></td></tr>
 
 <tr><td><label>Street:</label>
-<input type="" name="">
+<input type="" id="street">
 	</td>
 </tr>
 
 <tr><td>
 	<label>Town:</label>
-<input type="" name="">
+<input type="" id="town" name="">
 </td></tr>
 
 <tr><td>
 	
 	<label>County:</label>
-<input type="" name="">
+<input type="" id="county" name="">
 </td></tr>
 
 <tr><td>
 	<label>Postcode:</label>
-<input type="" name="">
+<input type="" name="" id="postcode">
 </td></tr>
+<input type="hidden" id="lat" value="">
+<input type="hidden" id="lng" value="">
 </table>
 
 
@@ -98,5 +177,5 @@ console.log('http://maps.googleapis.com/maps/api/geocode/json?address=' + postco
 
 
 
-<a href="{% url 'rooms-images' %}" class="btn btn-success">Save</a>
+<a href="" id="send" class="btn btn-success">Save</a>
 {% endblock %}

@@ -117,11 +117,11 @@ class Document(models.Model):
 
 
 class Location(models.Model):
-	venue = models.ForeignKey(Venue,on_delete=models.CASCADE,null=True)
+	venue = models.OneToOneField(Venue,on_delete=models.CASCADE,null=True)
 	number = models.CharField(max_length=1024, help_text="House number", null=True)
 	street = models.CharField(max_length=1024, help_text="Street name", null=True)
 	town = models.CharField(max_length=1024, help_text="Town", null=True)
-	country = models.CharField(max_length=1024, help_text="Country", null=True)
+	county = models.CharField(max_length=1024, help_text="County", null=True)
 	postcode = models.CharField(max_length=1024, help_text="Postcode", null=True)
 	position = gmodels.PointField(null=True, blank=True)
 

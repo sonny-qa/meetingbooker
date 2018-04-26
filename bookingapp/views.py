@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Venue, Features, Room, Booking, Document
+from .models import Venue, Features, Room, Booking, Document, Location
 from django.views import generic
 from django import forms
 from django.forms import ModelForm, inlineformset_factory
@@ -50,6 +50,9 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+
+from django.contrib.gis.geos import GEOSGeometry  
+from decimal import Decimal
 
 
 
@@ -145,6 +148,38 @@ def LoadVenueDetails(request):
 	return HttpResponse(json.dumps(data),content_type="application/json")
 	#return render(request,'bookingapp/venue_details.html',{'venue_details':venue_details})
 
+def SaveVenueDetails(request):
+	postcode = request.GET.get('postcode')
+	lat = request.GET.get('lat')
+	lng = request.GET.get('lng')
+	venue_name = request.GET.get('venue_name')
+	
+	print('got postcode back...',lat,lng,venue_name)
+	print('anything', Venue.objects.filter(name=venue_name).first())
+	
+
+	# check if the name being tried is already a match for venue instances
+	if (Venue.objects.filter(name=venue_name).first()):
+		return HttpResponse('name already exists')
+	else:
+		new_venue = Venue.objects.create(name=venue_name)
+		new_venue.save()
+
+		point = GEOSGeometry("POINT({0} {1})".format(Decimal(lng), Decimal(lat)))
+
+		loc = Location(venue=new_venue,postcode=postcode,position=point)
+		loc.save()
+		return HttpResponse('created ok')
+
+		
+	
+
+		# create a new instance of Venue
+
+		# create a new instance of the address record
+
+
+	# return error - name already in use
 
 #list of venues for editing rooms
 class RoomListEdit(ListView):
@@ -203,6 +238,12 @@ class VenueAdd(CreateView):
 	model = Venue
 	template_name = 'bookingapp/venue_add.html'
 	fields = ('name',)
+
+
+
+
+
+	
 
 def signup(request):
     if request.method == 'POST':

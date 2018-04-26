@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Venue, Features, Room, Booking, Document
+from .models import  Venue, Features, Room, Booking, Document, Location
 # Register your models here.
 
 #admin.site.register(Venue)
@@ -32,5 +32,9 @@ class Booking(admin.ModelAdmin):
 @admin.register(Document)
 class Document(admin.ModelAdmin):
 	list_display = ('upload','room','uploaded_at',)
+
+@admin.register(Location)
+class Location(admin.ModelAdmin):
+	list_display = ('venue','postcode','position','street','county')
 
 #admin.site.register(Venue,VenueAdmin)
